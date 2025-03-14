@@ -31,6 +31,7 @@ alloy-rpc-types-beacon = { workspace = true, optional = true }
 alloy-rpc-types-debug = { workspace = true, optional = true }
 alloy-rpc-types-engine = { workspace = true, optional = true, features = [
     "serde",
+    "jwt",
 ] }
 alloy-rpc-types-eth = { workspace = true, optional = true, features = [
     "serde",
