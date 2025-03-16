@@ -172,12 +172,14 @@ where
     {
         let sized_params = std::mem::size_of::<Params>() != 0;
 
-        let mut map = serializer.serialize_map(Some(3 + sized_params as usize))?;
+        let mut map = serializer.serialize_map(Some(4))?;
         map.serialize_entry("method", &self.meta.method[..])?;
 
         // Params may be omitted if it is 0-sized
         if sized_params {
             map.serialize_entry("params", &self.params)?;
+        } else {
+            map.serialize_entry("params", &[] as &[String])?;
         }
 
         map.serialize_entry("id", &self.meta.id)?;
@@ -401,7 +403,7 @@ mod test {
 
     #[test]
     fn test_ser_deser() {
-        test_inner(Request::<()>::new("test", 1.into(), ()));
+        test_inner(Request::<[(); 0]>::new("test", 1.into(), []));
         test_inner(Request::<u64>::new("test", "hello".to_string().into(), 1));
         test_inner(Request::<String>::new("test", Id::None, "test".to_string()));
         test_inner(Request::<Vec<u64>>::new("test", u64::MAX.into(), vec![1, 2, 3]));
